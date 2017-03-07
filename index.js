@@ -23,9 +23,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('new user', function(user){
-    var arr=[];
-    arr.push(user);
-    socket.broadcast.emit('userAdded', arr);
+    socket.broadcast.emit('userAdded', user);
   });
 });
 

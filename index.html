@@ -25,6 +25,7 @@
 var person = prompt("Please enter your name");
 if (person !== '' && person.length>1 && person !==null) {
   var socket = io();
+  var users=[];
   socket.emit('new user', person);
 
   $('form').submit(function(){
@@ -41,13 +42,12 @@ if (person !== '' && person.length>1 && person !==null) {
     }
     else{
 
-    var message=sender+ " >>Said>>"+ msg ;
+    var message=sender+ " Says >> "+ msg ;
     $('#messages').append($('<li>').text(message));
     }
   });
   socket.on('userAdded', function(usersActive){
-    for(i=0;i<=usersActive.length; i++){
-    console.log("Active Users are : "+ usersActive );}
+    console.log("Welcome new user : "+ usersActive );
   });
 }
   
