@@ -8,10 +8,14 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('a user connected');
-  socket.on('chat message', function(msg){
+
+    
+  socket.on('chat message', function(msg, person){
   	//	send to everyone except someone usee...
   	//	socket.broadcast.emit('hi');
-  	io.emit('chat message', msg);
+
+      io.emit('chat message', msg, person );
+   
     //  console.log('message : ', msg);
   });
   socket.on('disconnect', function(){
@@ -22,7 +26,7 @@ io.on('connection', function(socket){
     var arr=[];
     arr.push(user);
     socket.broadcast.emit('userAdded', arr);
-  })
+  });
 });
 
 http.listen(3000, function(){

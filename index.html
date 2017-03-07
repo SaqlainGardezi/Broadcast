@@ -25,21 +25,30 @@
 var person = prompt("Please enter your name");
 if (person !== '' && person.length>1 && person !==null) {
   var socket = io();
-
   socket.emit('new user', person);
 
   $('form').submit(function(){
-    socket.emit('chat message', $('#m').val());
+
+    socket.emit('chat message',  $('#m').val(), person);
     $('#m').val('');
     return false;
   });
-  socket.on('chat message', function(msg){
-    $('#messages').append($('<li>').text(msg));
+  socket.on('chat message', function(msg, sender){
+    if (person ==sender ) {
+
+    var message="My msg is : "+ msg ;
+    $('#messages').append($('<li>').text(message));
+    }
+    else{
+
+    var message=sender+ " >>Said>>"+ msg ;
+    $('#messages').append($('<li>').text(message));
+    }
   });
   socket.on('userAdded', function(usersActive){
     for(i=0;i<=usersActive.length; i++){
     console.log("Active Users are : "+ usersActive );}
-  })
+  });
 }
   
 </script>
