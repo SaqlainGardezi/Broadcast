@@ -34,31 +34,21 @@ console.log("request has :: "+ req.body.email);
  email=req.body.email;
 conn.query(queryString,  email, function(err, rows, fields) {
     
-    if (err) {console.log("error: "+ err);}
+    if (err) {
+    	callback("Sorry our system have some errors", null);
+    }
     else if (rows=='') {
     	
-	 	res.send('empty');
+	 	callback("Email Not Found", null);
     }
     else{
-	 	res.send("name is " +  rows[0].name);
+    	callback(null, rows[0]);
 	 }
    });
 	
 };
 
-var doLogIn=function(req, res, callback){
-	findUser(req, res, function(err, user){
-		if(err){
 
-		}
-		else if (req.body.email==user.email && req.body.password==user.password){
-
-		}
-		else{
-			res.sendfile('/login.html');
-		}
-	});
-};
 
 module.exports.indexPage=function(req, res){
 	if (true) {
@@ -81,10 +71,20 @@ module.exports.loginForm=function(req, res){
 
 module.exports.login=function(req, res){
 
-	doLogIn(req, res, function(req, res, responseData){
-        var session=responseData;
-         res.redirect('/');
-     });
+	findUser(req, res, function(err, user){
+		if(err){
+			res.send(err);
+		}
+		else if (req.body.email !== user.email || req.body.password !== user.password) {
+			res.send('email password combination failed');
+		}
+		else if (req.body.email==user.email && req.body.password==user.password){
+			res.send("logged in successfully");
+		}
+		else{
+			res.send('Sorry we have some errors');
+		}
+	});
 };
 
 module.exports.register=function(req, res){
