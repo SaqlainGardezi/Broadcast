@@ -14,6 +14,7 @@
     </style>
   </head>
   <body>
+  <h1 id="name">saqlain</h1>
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
@@ -22,7 +23,8 @@
    <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-var person = prompt("Please enter your name");
+//var person = prompt("Please enter your name");
+  var person=document.getElementById("name").innerHTML;
 if (person !== '' && person.length>1 && person !==null) {
   var socket = io();
   var users=[];

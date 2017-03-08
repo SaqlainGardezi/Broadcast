@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    title I am form
+  | &#x9;
+  body
+    form(method='post', action='/index/login')
+      input(type='email', name='email')
+      | &#x9;&#x9;&#x9;
+      br
+      | &#x9;&#x9;&#x9;
+      input(type='password', name='password')
+      | &#x9;&#x9;
+      | &#x9;&#x9;&#x9;
+      br
+      | &#x9;&#x9;&#x9;
+      input(type='submit', name='submit', value='Login')

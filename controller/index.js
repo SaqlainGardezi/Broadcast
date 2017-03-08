@@ -21,6 +21,7 @@ var apiOptions={
 //     apiOptions.server="https://gentle-dusk-39267.herokuapp.com/";
 // }
 
+
 var isLoggedin=function(){
 
 };
@@ -51,18 +52,18 @@ conn.query(queryString,  email, function(err, rows, fields) {
 
 
 module.exports.indexPage=function(req, res){
-	if (true) {
-		res.sendfile('index.html');
+	if (false) {
+		res.render('index');
 	}
 	else{
-		res.sendfile('login.html');
+		res.redirect('/index/login');
 	}
 };
 
 
 module.exports.loginForm=function(req, res){
 	if (true) {
-		res.sendfile('login.html');
+		res.render('login');
 	}
 	else{
 		res.redirect('/index');
@@ -79,7 +80,14 @@ module.exports.login=function(req, res){
 			res.send('email password combination failed');
 		}
 		else if (req.body.email==user.email && req.body.password==user.password){
-			res.send("logged in successfully");
+			req.session.user=user;
+			res.render('index', {
+      			user:req.session.user
+			});
+			// res.sendfile('./views/index.html', {
+   //    		  person:req.session.user.name
+   // 			 });
+  
 		}
 		else{
 			res.send('Sorry we have some errors');
@@ -89,9 +97,9 @@ module.exports.login=function(req, res){
 
 module.exports.register=function(req, res){
 	if (!isLoggedIn) {
-		res.sendfile('register.html')
+		res.sendfile('./views/register.html');
 	}
 	else{
-		res.redirect('/');
+		res.redirect('/index');
 	}
 }

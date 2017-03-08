@@ -2,9 +2,14 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var path = require('path');
+
+
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
+var session = require('express-session');
 
 
 app.use(logger('dev'));
@@ -14,9 +19,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
+app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}));
+
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
 var index = require('./routes/index');
 
+
 app.use('/index', index);
+
+
+
 // app.get('/', function(req, res){
 //   res.sendfile('index.html');
 // });
