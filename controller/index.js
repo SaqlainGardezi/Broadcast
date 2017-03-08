@@ -23,7 +23,12 @@ var apiOptions={
 
 
 var isLoggedin=function(){
-
+	if (req.session.user !== '') {
+		return false;
+	}
+	else{
+		return true;
+	}
 };
 
 var findUser=function(req, res, callback){
@@ -52,8 +57,10 @@ conn.query(queryString,  email, function(err, rows, fields) {
 
 
 module.exports.indexPage=function(req, res){
-	if (false) {
-		res.render('index');
+	if (req.session.user) {
+		res.render('index', {
+    			user:req.session.user
+		});
 	}
 	else{
 		res.redirect('/index/login');
@@ -62,7 +69,7 @@ module.exports.indexPage=function(req, res){
 
 
 module.exports.loginForm=function(req, res){
-	if (true) {
+	if (!req.session.user) {
 		res.render('login');
 	}
 	else{
@@ -81,9 +88,10 @@ module.exports.login=function(req, res){
 		}
 		else if (req.body.email==user.email && req.body.password==user.password){
 			req.session.user=user;
-			res.render('index', {
-      			user:req.session.user
-			});
+				res.redirect('/index');
+			// res.render('index', {
+   //    			user:req.session.user
+			// });
 			// res.sendfile('./views/index.html', {
    //    		  person:req.session.user.name
    // 			 });
