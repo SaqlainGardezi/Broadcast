@@ -2,9 +2,24 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.get('/', function(req, res){
-  res.sendfile('index.html');
-});
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+
+app.use(logger('dev'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+
+var index = require('./routes/index');
+
+app.use('/index', index);
+// app.get('/', function(req, res){
+//   res.sendfile('index.html');
+// });
 
 io.on('connection', function(socket){
   console.log('a user connected');
