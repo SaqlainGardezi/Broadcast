@@ -1,19 +1,94 @@
-doctype html
-html
-  head
-    title Socket.IO chat
-    |     
-    link(rel='stylesheet', type='text/css', href='stylesheet.css')
-  |   
-  body
-    h1#name saqlain
-    |     
-    ul#messages
-    |     
-    form(action='')
-      input#m(autocomplete='off')
-      button Send
-    |    
-    script(src='/socket.io/socket.io.js')
-    script(src='http://code.jquery.com/jquery-1.11.1.js')
-    script(type='text/javascript', src='client.js')
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+  <h1 id="name">saqlain</h1>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+   <script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+
+//var person = prompt("Please enter your name");
+  var person=document.getElementById("name").innerHTML;
+if (person !== '' && person.length>1 && person !==null) {
+  var socket = io();
+  var users=[];
+  socket.emit('new user', person);
+
+  $('form').submit(function(){
+
+    socket.emit('chat message',  $('#m').val(), person);
+    $('#m').val('');
+    return false;
+  });
+  var userList=[];
+  socket.on('update', function (users){
+        userList = users;
+        $('#user').empty();
+        for(var i=0; i<userList.length; i++) {
+            $('#user').append("<h1>" + userList[i] + "</h1>"); 
+        }
+    });
+
+  socket.on('chat message', function(msg, sender){
+    if (person ==sender ) {
+
+    var message="My msg is : "+ msg ;
+    $('#messages').append($('<li>').text(message));
+    }
+    else{
+
+    var message=sender+ " Says >> "+ msg ;
+    $('#messages').append($('<li>').text(message));
+    }
+  });
+  socket.on('userAdded', function(usersActive){
+    console.log("Welcome new user : "+ usersActive );
+    socket.emit('updateConnected', userActive);
+  });
+
+  socket.on('userAdded', function(usersActive){
+        console.log("Welcome new user : "+ usersActive );
+        for (i = 0; i < usersActive.length; i++) { 
+        document.getElementById("loggedIn").innerHTML=usersActive[i];
+        }
+        });
+
+  socket.on('update', function(users){
+    var i=0;
+    while(users[i]){
+    console.log("logged in users are :: " +users[i].name );
+    }
+  });
+    socket.on('displayActive', function(userList){  
+    $('#active').append($('<li>').text(userList));
+    });
+
+}
+else{
+
+    var message="Your session expired log in to continue" ;
+    $('#messages').append($('<li>').text(message));
+}
+
+</script>
+
+
+  </body>
+</html>

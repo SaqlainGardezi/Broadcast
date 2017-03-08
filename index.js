@@ -40,6 +40,7 @@ app.use('/index', index);
 //   res.sendfile('index.html');
 // });
 
+var users=[];
 io.on('connection', function(socket){
   console.log('a user connected');
 
@@ -57,8 +58,20 @@ io.on('connection', function(socket){
   });
 
   socket.on('new user', function(user){
-    socket.broadcast.emit('userAdded', user);
+      
+        users.push(user);
+    //updateClients(users);
+      console.log(users);
+//      io.sockets.send('userAdded', users);
+      io.sockets.emit('userAdded', users);
+
+    
   });
+
+   function updateClients(users) {
+        io.sockets.emit('update', users);
+    }
+
 });
 
 http.listen(3000, function(){

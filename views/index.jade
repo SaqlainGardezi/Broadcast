@@ -14,7 +14,9 @@ html
       #messages li:nth-child(odd) { background: #eee; }
   |   
   body
-    h1#name #{user.name} 
+    h5#loggedIn
+    h1#name #{user.name}
+    h3#email #{user.email}   
     |     
     ul#messages
     |     
@@ -27,9 +29,10 @@ html
     script.
         //var person = prompt("Please enter your name");
         var person=document.getElementById("name").innerHTML;
+        
         if (person !== '' && person.length>1 && person !==null) {
         var socket = io();
-        var users=[];
+        
         socket.emit('new user', person);
         $('form').submit(function(){
         socket.emit('chat message',  $('#m').val(), person);
@@ -48,5 +51,9 @@ html
         });
         socket.on('userAdded', function(usersActive){
         console.log("Welcome new user : "+ usersActive );
+        document.getElementById("loggedIn").innerHTML += '';
+        for (i = 0; i < usersActive.length; i++) {
+        document.getElementById("loggedIn").innerHTML += usersActive[i];
+        }
         });
         }

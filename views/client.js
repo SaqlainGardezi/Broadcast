@@ -12,6 +12,15 @@ if (person !== '' && person.length>1 && person !==null) {
     $('#m').val('');
     return false;
   });
+	var userList=[];
+ 	socket.on('update', function (users){
+        userList = users;
+        $('#user').empty();
+        for(var i=0; i<userList.length; i++) {
+            $('#user').append("<h1>" + userList[i] + "</h1>"); 
+        }
+    });
+
   socket.on('chat message', function(msg, sender){
     if (person ==sender ) {
 
@@ -27,6 +36,13 @@ if (person !== '' && person.length>1 && person !==null) {
   socket.on('userAdded', function(usersActive){
     console.log("Welcome new user : "+ usersActive );
     socket.emit('updateConnected', userActive);
+  });
+
+  socket.on('update', function(users){
+  	var i=0;
+  	while(users[i]){
+  	console.log("logged in users are :: " +users[i].name )
+  	}
   });
     socket.on('displayActive', function(userList){	
     $('#active').append($('<li>').text(userList));
