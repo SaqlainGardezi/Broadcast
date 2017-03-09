@@ -49,9 +49,22 @@ html
         $('#messages').append($('<li>').text(message));
         }
         });
+        socket.on('getUserName', function(){
+        socket.emit('deleteUser', person);
+        })
+        socket.on('userDisconnected', function(usersActive){
+        console.log("Welcome new user : "+ usersActive );
+        document.getElementById("loggedIn").innerHTML = '';
+        for (i = 0; i < usersActive.length; i++) {
+        document.getElementById("loggedIn").innerHTML += usersActive[i];
+        }
+        });
+
+
+
         socket.on('userAdded', function(usersActive){
         console.log("Welcome new user : "+ usersActive );
-        document.getElementById("loggedIn").innerHTML += '';
+        document.getElementById("loggedIn").innerHTML = '';
         for (i = 0; i < usersActive.length; i++) {
         document.getElementById("loggedIn").innerHTML += usersActive[i];
         }
