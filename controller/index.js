@@ -54,7 +54,15 @@ conn.query(queryString,  email, function(err, rows, fields) {
 	
 };
 
-
+module.exports.logout=function(req, res){
+	if (req.session.user) {
+		req.session.user=null;
+		res.redirect('/index');
+	}
+	else{
+		res.redirect('/index');
+	}
+};
 
 module.exports.indexPage=function(req, res){
 	
@@ -69,6 +77,15 @@ module.exports.indexPage=function(req, res){
 	}
 };
 
+
+module.exports.registerForm=function(req, res){
+	if (!req.session.user) {
+		res.render('register');
+	}
+	else{
+		res.redirect('/index');
+	}
+};
 
 module.exports.loginForm=function(req, res){
 	if (!req.session.user) {
@@ -107,10 +124,44 @@ module.exports.login=function(req, res){
 };
 
 module.exports.register=function(req, res){
-	if (!isLoggedIn) {
-		res.sendfile('./views/register.html');
-	}
-	else{
-		res.redirect('/index');
-	}
-}
+	if (req.body.email && req.body.name && req.body.password) {
+
+		
+
+ 		var queryString = 'SELECT * FROM users WHERE email = ?';
+ 		email=req.body.email;
+		conn.query(queryString,  email, function(err, rows, fields) {
+    console.log("Rows are:: " + rows);
+   		 if (err) {
+    			res.send("Sorry our system have some errors with database");
+    		}
+    		
+   		 else{
+    		var employee = { name: req.body.name, email: req.body.email, password: req.body.password };
+  			conn.query('INSERT INTO users SET ?', employee, function(err,response){
+  				if (err) {
+  					res.send("Duplicate entry");
+  				}
+  				else{
+  					user={
+  						name:req.body.name,
+  						email:req.body.email
+  					};
+  					req.session.user=user;
+			
+					res.redirect('/index');
+  				}
+			});
+		 }
+   		});
+
+
+
+
+		
+		}else{
+			res.send("all fields required");
+		}
+		//res.send("email " + req.body.email + " name : "+ req.body.name  + " password:  " + req.body.password);
+	
+};

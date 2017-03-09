@@ -2,8 +2,13 @@ doctype html
 html
   head
     title I am form
-  | &#x9;
+    style.
+      form#register{ background: grey; display:block; padding-top:5px; padding-bottom:5px;}
+      button#register{width:80px; margin-left: 92%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
   body
+    form#register(method='get', action='/index/register')
+        button#register Register
     form(method='post', action='/index/login')
       input(type='email', name='email')
       | &#x9;&#x9;&#x9;
