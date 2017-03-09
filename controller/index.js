@@ -57,9 +57,11 @@ conn.query(queryString,  email, function(err, rows, fields) {
 
 
 module.exports.indexPage=function(req, res){
+	
 	if (req.session.user) {
 		res.render('index', {
     			user:req.session.user
+    			
 		});
 	}
 	else{
@@ -88,6 +90,7 @@ module.exports.login=function(req, res){
 		}
 		else if (req.body.email==user.email && req.body.password==user.password){
 			req.session.user=user;
+			
 				res.redirect('/index');
 			// res.render('index', {
    //    			user:req.session.user

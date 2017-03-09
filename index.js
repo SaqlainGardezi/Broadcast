@@ -1,7 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
+//const os=require('os');  
 var path = require('path');
 
 
@@ -42,8 +42,10 @@ app.use('/index', index);
 
 var users=[];
 var thisUser=[];
+
 io.on('connection', function(socket){
   console.log('a user connected');
+
 
   socket.on('chat message', function(msg, person){
     //  send to everyone except someone usee...
@@ -79,8 +81,16 @@ io.on('connection', function(socket){
  
 
   socket.on('new user', function(user){
-
+     console.log("     ");
+    console.log("     ");
+    console.log("     ");
+    //console.log("os.networkInterfaces(): \n",os.networkInterfaces());  
+    console.log("     ");
+    console.log("     ");
+    console.log("     ");
         thisUser[socket.id]=user;
+
+        console.log("socket id is :: "+ socket.id);
         users.push(user);
     //updateClients(users);
       console.log(users);

@@ -30,10 +30,14 @@ html
         //var person = prompt("Please enter your name");
         var person=document.getElementById("name").innerHTML;
         
+        
         if (person !== '' && person.length>1 && person !==null) {
         var socket = io();
-        
+
+
+        document.cookie= email +"=" + person;
         socket.emit('new user', person);
+
         $('form').submit(function(){
         socket.emit('chat message',  $('#m').val(), person);
         $('#m').val('');
@@ -54,8 +58,10 @@ html
         })
         socket.on('userDisconnected', function(usersActive){
         console.log("Welcome new user : "+ usersActive );
+        
         document.getElementById("loggedIn").innerHTML = '';
         for (i = 0; i < usersActive.length; i++) {
+        document.getElementById("loggedIn").innerHTML += "  ##  ";
         document.getElementById("loggedIn").innerHTML += usersActive[i];
         }
         });
@@ -66,6 +72,7 @@ html
         console.log("Welcome new user : "+ usersActive );
         document.getElementById("loggedIn").innerHTML = '';
         for (i = 0; i < usersActive.length; i++) {
+        document.getElementById("loggedIn").innerHTML += "  ##  ";
         document.getElementById("loggedIn").innerHTML += usersActive[i];
         }
         });
