@@ -17,9 +17,9 @@ conn.connect(function(err){
 var apiOptions={
     server:"http://localhost:3000"
 };
-// if (process.env.NODE_ENV === 'production') {
-//     apiOptions.server="https://gentle-dusk-39267.herokuapp.com/";
-// }
+ if (process.env.NODE_ENV === 'production') {
+     apiOptions.server="https://gentle-dusk-39267.herokuapp.com/";
+ }
 
 
 var isLoggedin=function(){
